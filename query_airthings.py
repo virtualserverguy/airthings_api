@@ -40,4 +40,7 @@ for deviceIds in devicesJSON["devices"]:
 stats = requests.get(url='https://ext-api.airthings.com/v1/devices/' + deviceid + '/latest-samples', headers = requestHeader)
 statsJSON = stats.json()
 
-print(json.dumps(statsJSON["data"]))
+data = statsJSON["data"]
+data["deviceid"] = int(deviceid)
+
+print(json.dumps(data))
