@@ -41,7 +41,8 @@ for DeviceIds in DevicesJSON["devices"]:
         DeviceId = DeviceIds["id"]
 
         # Query for the devices stats
-        Stats = requests.get(url=DEVICEURL + DeviceId + '/latest-samples', headers = RequestHeader, timeout = 10)
+        Stats = requests.get(url=DEVICEURL + DeviceId +
+                             '/latest-samples', headers = RequestHeader, timeout = 10)
         StatsJSON = Stats.json()
 
         # Format the data for influxDB, adding the deviceId to the output
