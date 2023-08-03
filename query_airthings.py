@@ -1,8 +1,14 @@
+"""
+Quick way to query the AirThings API and
+import that output into a Grafana dashboard.
+"""
+
 import json
 import requests
-import pandas as pd
 
-authUrl = "https://accounts-api.airthings.com/v1/token"
+AUTHURL = "https://accounts-api.airthings.com/v1/token"
+DEVICEURL = "https://ext-api.airthings.com/v1/devices"
+
 
 # Setup the Client secrets
 authPayload = json.dumps({
@@ -13,39 +19,38 @@ authPayload = json.dumps({
     "read:device:current_values"
   ]
 })
-authHeaders = {
+AuthHeaders = {
   'Content-Type': 'application/json'
 }
 
-deviceUrl = "https://ext-api.airthings.com/v1/devices"
-
 # Login
-auth = requests.request("POST", authUrl, headers=authHeaders, data=authPayload, timeout=3)
-authJSON = auth.json()
-authToken = authJSON.get('access_token')
+Auth = requests.request("POST", AUTHURL, headers=AuthHeaders, data=authPayload, timeout=3)
+AuthJSON = Auth.json()
+AuthToken = AuthJSON.get('access_token')
 
-requestHeader = {
-  "Authorization": 'Bearer ' + authToken
+RequestHeader = {
+  "Authorization": 'Bearer ' + AuthToken
 }
 
 # Get the device list
-devices = requests.get(url=deviceUrl, headers = requestHeader)
-devicesJSON = devices.json()
+Devices = requests.get(url=DEVICEURL, headers = RequestHeader, timeout = 10)
+DevicesJSON = Devices.json()
 
-for deviceIds in devicesJSON["devices"]:
-  if deviceIds["deviceType"] == "WAVE_PLUS":
-    deviceid = deviceIds["id"]
+for DeviceIds in DevicesJSON["devices"]:
+    if DeviceIds["deviceType"] == "WAVE_PLUS":
+        DeviceId = DeviceIds["id"]
 
-    # Query for the devices stats
-    stats = requests.get(url='https://ext-api.airthings.com/v1/devices/' + deviceid + '/latest-samples', headers = requestHeader)
-    statsJSON = stats.json()
+        # Query for the devices stats
+        Stats = requests.get(url=DEVICEURL + DeviceId +
+                             '/latest-samples', headers = RequestHeader, timeout = 10)
+        StatsJSON = Stats.json()
 
-    # Format the data for influxDB, adding the deviceId to the output
-    data = statsJSON["data"]
-    data["deviceid"] = int(deviceid)
+        # Format the data for influxDB, adding the deviceId to the output
+        Data = StatsJSON["data"]
+        Data["deviceid"] = int(DeviceId)
 
-    # Output the data
-    print(json.dumps(data))
+        # Output the data
+        print(json.dumps(Data))
 
-  else:
-    print("No WAVE PLUS devices found.")
+    else:
+        print("No WAVE PLUS devices found.")
