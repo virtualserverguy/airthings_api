@@ -6,8 +6,8 @@ import that output into a Grafana dashboard.
 import json
 import requests
 
-authUrl = "https://accounts-api.airthings.com/v1/token"
-deviceUrl = "https://ext-api.airthings.com/v1/devices"
+AUTHURL = "https://accounts-api.airthings.com/v1/token"
+DEVICEURL = "https://ext-api.airthings.com/v1/devices"
 
 
 # Setup the Client secrets
@@ -33,7 +33,7 @@ requestHeader = {
 }
 
 # Get the device list
-devices = requests.get(url=deviceUrl, headers = requestHeader, timeout = 10)
+devices = requests.get(url=DEVICEURL, headers = requestHeader, timeout = 10)
 devicesJSON = devices.json()
 
 data = []
