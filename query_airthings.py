@@ -49,7 +49,6 @@ for deviceIds in devicesJSON["devices"]:
     # Format the data for influxDB, adding the deviceId to the output
     dictOutput = json.loads('{ "deviceid": ' + deviceid + ',' + json.dumps(statsJSON["data"]).strip('{}') + '}')
 
-    #formattedData = json.loads(jsonOutput)
     data.append(dictOutput)
 
 # Output the data
