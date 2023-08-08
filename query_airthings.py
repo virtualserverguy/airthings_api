@@ -33,8 +33,8 @@ RequestHeader = {
 }
 
 # Get the device list
-devices = requests.get(url=deviceUrl, headers = requestHeader)
-devicesJSON = devices.json()
+Devices = requests.get(url=DEVICEURL, headers = RequestHeader, timeout = 10)
+DevicesJSON = Devices.json()
 
 data = []
 
