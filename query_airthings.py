@@ -19,22 +19,22 @@ authPayload = json.dumps({
     "read:device:current_values"
   ]
 })
-AuthHeaders = {
+authHeaders = {
   'Content-Type': 'application/json'
 }
 
 # Login
-Auth = requests.request("POST", AUTHURL, headers=AuthHeaders, data=authPayload, timeout=3)
-AuthJSON = Auth.json()
-AuthToken = AuthJSON.get('access_token')
+auth = requests.request("POST", AUTHURL, headers=authHeaders, data=authPayload, timeout=3)
+authJSON = auth.json()
+authToken = authJSON.get('access_token')
 
-RequestHeader = {
-  "Authorization": 'Bearer ' + AuthToken
+requestHeader = {
+  "Authorization": 'Bearer ' + authToken
 }
 
 # Get the device list
-Devices = requests.get(url=DEVICEURL, headers = RequestHeader, timeout = 10)
-DevicesJSON = Devices.json()
+devices = requests.get(url=DEVICEURL, headers = requestHeader, timeout = 10)
+devicesJSON = devices.json()
 
 data = []
 
@@ -49,6 +49,7 @@ for deviceIds in devicesJSON["devices"]:
     # Format the data for influxDB, adding the deviceId to the output
     dictOutput = json.loads('{ "deviceid": ' + deviceid + ',' + json.dumps(statsJSON["data"]).strip('{}') + '}')
 
+    #formattedData = json.loads(jsonOutput)
     data.append(dictOutput)
 
 # Output the data
