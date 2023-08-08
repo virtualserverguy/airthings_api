@@ -6,8 +6,8 @@ import that output into a Grafana dashboard.
 import json
 import requests
 
-AUTHURL = "https://accounts-api.airthings.com/v1/token"
-DEVICEURL = "https://ext-api.airthings.com/v1/devices"
+authUrl = "https://accounts-api.airthings.com/v1/token"
+deviceUrl = "https://ext-api.airthings.com/v1/devices"
 
 
 # Setup the Client secrets
@@ -19,21 +19,21 @@ authPayload = json.dumps({
     "read:device:current_values"
   ]
 })
-AuthHeaders = {
+authHeaders = {
   'Content-Type': 'application/json'
 }
 
 # Login
-Auth = requests.request("POST", AUTHURL, headers=AuthHeaders, data=authPayload, timeout=3)
-AuthJSON = Auth.json()
-AuthToken = AuthJSON.get('access_token')
+auth = requests.request("POST", AUTHURL, headers=authHeaders, data=authPayload, timeout=3)
+authJSON = auth.json()
+authToken = authJSON.get('access_token')
 
-RequestHeader = {
+requestHeader = {
   "Authorization": 'Bearer ' + AuthToken
 }
 
 # Get the device list
-devices = requests.get(url=deviceUrl, headers = requestHeader)
+devices = requests.get(url=deviceUrl, headers = requestHeader, timeout = 10)
 devicesJSON = devices.json()
 
 data = []
