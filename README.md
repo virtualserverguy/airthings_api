@@ -7,8 +7,11 @@ Replace the client ID and client secret with values supplied from airthings. Thi
 ```
 # Airthings Data
 [[inputs.exec]]
+  interval = "5m"
   name_suffix = "_airthings"
   commands = ["python3 /scripts/query_airthings.py"]
   timeout = "15s"
   data_format = "json"
 ```
+
+# Grafana

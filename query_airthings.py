@@ -36,21 +36,20 @@ RequestHeader = {
 Devices = requests.get(url=DEVICEURL, headers = RequestHeader, timeout = 10)
 DevicesJSON = Devices.json()
 
-for DeviceIds in DevicesJSON["devices"]:
-    if DeviceIds["deviceType"] == "WAVE_PLUS":
-        DeviceId = DeviceIds["id"]
+data = []
 
-        # Query for the devices stats
-        Stats = requests.get(url=DEVICEURL + DeviceId +
-                             '/latest-samples', headers = RequestHeader, timeout = 10)
-        StatsJSON = Stats.json()
+for deviceIds in devicesJSON["devices"]:
+  if deviceIds["deviceType"] == "WAVE_PLUS":
+    deviceid = deviceIds["id"]
 
-        # Format the data for influxDB, adding the deviceId to the output
-        Data = StatsJSON["data"]
-        Data["deviceid"] = int(DeviceId)
+    # Query for the devices stats
+    stats = requests.get(url='https://ext-api.airthings.com/v1/devices/' + deviceid + '/latest-samples', headers = requestHeader, timeout = 10)
+    statsJSON = stats.json()
 
-        # Output the data
-        print(json.dumps(Data))
+    # Format the data for influxDB, adding the deviceId to the output
+    dictOutput = json.loads('{ "deviceid": ' + deviceid + ',' + json.dumps(statsJSON["data"]).strip('{}') + '}')
 
-    else:
-        print("No WAVE PLUS devices found.")
+    data.append(dictOutput)
+
+# Output the data
+print(json.dumps(data, indent=4))
