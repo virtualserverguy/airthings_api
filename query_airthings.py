@@ -29,7 +29,7 @@ authJSON = auth.json()
 authToken = authJSON.get('access_token')
 
 requestHeader = {
-  "Authorization": 'Bearer ' + AuthToken
+  "Authorization": 'Bearer ' + authToken
 }
 
 # Get the device list
