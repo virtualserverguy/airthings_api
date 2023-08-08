@@ -33,8 +33,8 @@ RequestHeader = {
 }
 
 # Get the device list
-Devices = requests.get(url=DEVICEURL, headers = RequestHeader, timeout = 10)
-DevicesJSON = Devices.json()
+devices = requests.get(url=deviceUrl, headers = requestHeader)
+devicesJSON = devices.json()
 
 data = []
 
@@ -49,6 +49,7 @@ for deviceIds in devicesJSON["devices"]:
     # Format the data for influxDB, adding the deviceId to the output
     dictOutput = json.loads('{ "deviceid": ' + deviceid + ',' + json.dumps(statsJSON["data"]).strip('{}') + '}')
 
+    #formattedData = json.loads(jsonOutput)
     data.append(dictOutput)
 
 # Output the data
